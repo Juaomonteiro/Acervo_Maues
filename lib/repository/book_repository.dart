@@ -2,7 +2,7 @@ import '../models/book_model.dart';
 import '../services/book_service.dart';
 
 abstract class IBookRepository {
-  Future<List<Book>> fetchBooks();
+  Future<List<Livro>> fetchBooks();
 }
 
 class BookRepository implements IBookRepository {
@@ -11,9 +11,9 @@ class BookRepository implements IBookRepository {
   BookRepository(this._service);
 
   @override
-  Future<List<Book>> fetchBooks() async {
+  Future<List<Livro>> fetchBooks() async {
     final response = await _service.getBooks();
     final List data = response.data;
-    return data.map((json) => Book.fromJson(json)).toList();
+    return data.map((json) => Livro.fromJson(json)).toList();
   }
 }

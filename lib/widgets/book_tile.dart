@@ -1,17 +1,38 @@
+import 'package:biblioteca/models/book_model.dart';
+import 'package:biblioteca/widgets/BookDetailsModal.dart';
 import 'package:flutter/material.dart';
-import '../models/book_model.dart';
 
-class BookTile extends StatelessWidget {
-  final Book book;
+class BookCard extends StatelessWidget {
+  final Livro book;
 
-  const BookTile({super.key, required this.book});
+  const BookCard({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(book.title),
-      subtitle: Text(book.author),
-      leading: CircleAvatar(child: Text(book.id.toString())),
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => BookDetailsModal(book: book),
+        );
+      },
+      child: Column(
+        children: [
+          Image.network(
+            book.urlImagem,
+            height: 180,
+            fit: BoxFit.cover,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            book.titulo,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
     );
   }
 }

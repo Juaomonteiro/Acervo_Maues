@@ -6,7 +6,7 @@ class BookController {
 
   BookController(this._repository);
 
-  Future<List<Book>> loadBooks() async {
+  Future<List<Livro>> loadBooks() async {
     return await _repository.fetchBooks();
   }
 }

@@ -14,7 +14,7 @@ class BookPage extends StatefulWidget {
 
 class _BookPageState extends State<BookPage> {
   late final BookController _controller;
-  late Future<List<Book>> _futureBooks;
+  late Future<List<Livro>> _futureBooks;
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _BookPageState extends State<BookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('ACERVO DO GUARANÁ')),
-      body: FutureBuilder<List<Book>>(
+      body: FutureBuilder<List<Livro>>(
         future: _futureBooks,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -39,10 +39,17 @@ class _BookPageState extends State<BookPage> {
           }
 
           final books = snapshot.data!;
-          return ListView.builder(
+          return GridView.builder(
+            padding: const EdgeInsets.all(16),
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              childAspectRatio: 0.65,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+            ),
             itemCount: books.length,
             itemBuilder: (context, index) {
-              return BookTile(book: books[index]);
+              return BookCard(book: books[index]);
             },
           );
         },
