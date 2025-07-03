@@ -1,6 +1,6 @@
 # biblioteca
 
-A new Flutter project.
+Criação de um aplicativo de biblioteca digital para tornar o acesso a leitura mais fácil e prático criando um aplicativo de biblioteca digital vinculado a uma biblioteca física já existente. Por meio desse aplicativo os usuários poderão se cadastrar, buscar livros, reservar, emprestar e desenvolver digitalmente.
 
 ## Getting Started
 
