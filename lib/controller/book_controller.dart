@@ -1,12 +1,17 @@
-import '../models/book_model.dart';
-import '../repository/book_repository.dart';
+import 'package:biblioteca/models/book_model.dart';
+import 'package:biblioteca/services/interfaces/iconsumer_api_service.dart';
 
 class BookController {
-  final IBookRepository _repository;
+  final IConsumerApiService _service;
 
-  BookController(this._repository);
+  BookController(this._service);
 
-  Future<List<Livro>> loadBooks() async {
-    return await _repository.fetchBooks();
+  Future<List<Livro?>> loadBooks() async {
+    var bookList = await _service.getAllBooks();
+    if(bookList.isEmpty){
+      return List.empty();
+    }
+    return bookList;
   }
+  
 }

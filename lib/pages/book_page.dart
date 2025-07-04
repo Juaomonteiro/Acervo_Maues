@@ -1,7 +1,6 @@
+import 'package:biblioteca/services/consumer_api_service.dart';
 import 'package:flutter/material.dart';
 import '../controller/book_controller.dart';
-import '../repository/book_repository.dart';
-import '../services/book_service.dart';
 import '../models/book_model.dart';
 import '../widgets/book_tile.dart';
 
@@ -14,12 +13,12 @@ class BookPage extends StatefulWidget {
 
 class _BookPageState extends State<BookPage> {
   late final BookController _controller;
-  late Future<List<Livro>> _futureBooks;
+  late Future<List<Livro?>> _futureBooks;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    _controller = BookController(BookRepository(BookService()));
+    _controller = BookController(ConsumerApiService());
     _futureBooks = _controller.loadBooks();
   }
 
@@ -27,7 +26,7 @@ class _BookPageState extends State<BookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('ACERVO DO GUARANÁ')),
-      body: FutureBuilder<List<Livro>>(
+      body: FutureBuilder<List<Livro?>>(
         future: _futureBooks,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -49,7 +48,7 @@ class _BookPageState extends State<BookPage> {
             ),
             itemCount: books.length,
             itemBuilder: (context, index) {
-              return BookCard(book: books[index]);
+              return BookCard(book: books[index]!);
             },
           );
         },

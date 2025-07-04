@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'app.dart';
+import 'bibliotecaApp.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const BibliotecaApp());
 }
