@@ -15,17 +15,17 @@ class BookCard extends StatelessWidget {
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor: const Color.fromARGB(0, 0, 0, 0),
           builder: (_) => BookDetailsModal(book: book),
         );
       },
       child: Card(
-        color: Colors.amberAccent,
+        color: const Color.fromARGB(255, 63, 65, 221),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
         elevation: 4,
-        shadowColor: Colors.black12,
+        shadowColor: const Color.fromARGB(255, 15, 3, 87),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
@@ -53,6 +53,7 @@ class BookCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
+                  color: Colors.white,
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),
@@ -64,7 +65,7 @@ class BookCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: Colors.grey[600],
+                  color: const Color.fromARGB(255, 247, 245, 245),
                   fontSize: 14,
                 ),
               ),

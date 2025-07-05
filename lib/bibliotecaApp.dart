@@ -12,7 +12,8 @@ class BibliotecaApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
         appBarTheme: AppBarTheme(
-          color: Colors.amber
+          color: const Color.fromARGB(132, 62, 72, 209),
+          centerTitle: true
         )
       ),
       debugShowCheckedModeBanner: false,
