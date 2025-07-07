@@ -1,6 +1,8 @@
-import 'pages/book_page.dart';
-import 'package:flutter/material.dart';
 import 'package:biblioteca/pages/login_page.dart';
+import 'package:biblioteca/pages/login_register_page.dart';
+import 'package:flutter/material.dart';
+
+import 'pages/book_page.dart';
 
 class BibliotecaApp extends StatelessWidget {
   const BibliotecaApp({super.key});
@@ -17,9 +19,10 @@ class BibliotecaApp extends StatelessWidget {
         )
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginPage(),
+        '/register': (context) => const LoginRegisterPage(),
         '/home': (context) => const BookPage(),
       },
     );

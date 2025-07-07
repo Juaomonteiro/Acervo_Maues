@@ -1,7 +1,7 @@
-  import 'package:dio/dio.dart';
   import 'package:biblioteca/models/book_model.dart';
-  import 'package:biblioteca/models/login_model.dart';
-  import 'package:biblioteca/services/interfaces/iconsumer_api_service.dart';
+import 'package:biblioteca/models/login_model.dart';
+import 'package:biblioteca/services/interfaces/iconsumer_api_service.dart';
+import 'package:dio/dio.dart';
 
   class ConsumerApiService extends IConsumerApiService{
     static const String host = 'https://flutter-start-api.onrender.com';
@@ -37,15 +37,15 @@
     }
 
     @override
-    Future<String?> postRegisterUser(String nome, String email, String senha) async{
+    Future<bool> postRegisterUser(String nome, String email, String senha) async{
       try{
         var response = await _dio.post('/Auth/register', data: {'Nome': nome, 'Email': email, 'Senha': senha});
         if(response.statusCode != 201){
           throw Exception(response.statusMessage);
         }
-        return response.statusMessage ?? "Usuário Cadastrado com Sucesso";
+        return true;
       }catch(e){
-        return null;
+        return false;
       }
     }
 

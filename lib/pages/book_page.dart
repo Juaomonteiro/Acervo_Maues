@@ -1,5 +1,7 @@
+import 'package:biblioteca/pages/login_page.dart';
 import 'package:biblioteca/services/consumer_api_service.dart';
 import 'package:flutter/material.dart';
+
 import '../controller/book_controller.dart';
 import '../models/book_model.dart';
 import '../widgets/book_tile.dart';
@@ -25,7 +27,22 @@ class _BookPageState extends State<BookPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ACERVO DO GUARANÁ')),
+      appBar: AppBar(
+        title: const Text('ACERVO DO GUARANÁ'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.login_outlined),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder<List<Livro?>>(
         future: _futureBooks,
         builder: (context, snapshot) {

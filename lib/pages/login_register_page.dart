@@ -2,56 +2,54 @@ import 'package:biblioteca/controller/auth_controller.dart';
 import 'package:biblioteca/services/consumer_api_service.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginRegisterPage extends StatefulWidget {
+  const LoginRegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginRegisterPage> createState() => _LoginRegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginRegisterPageState extends State<LoginRegisterPage> {
+  final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late final AuthController _controller;
   bool _isLoading = false;
   bool _obscurePassword = true;
-  
+
   @override
   void initState() {
     super.initState();
     _controller = AuthController(ConsumerApiService());
   }
-  
-  void _login() async {
+
+  void _register() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
       try {
-        final response = await _controller.loginUser(
+        final response = await _controller.registerUser(
+          _nomeController.text,
           _emailController.text,
           _senhaController.text,
         );
+        if (response == false) {
+          throw Exception("Erro ao criar usuário");
+        }
         setState(() {
           _isLoading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Bem-vindo(a), ${response!.nome}!"),
-            duration: const Duration(milliseconds: 1800),
-          ),
+          const SnackBar(content: Text("Usuário criado com sucesso! Faça login.")),
         );
-
-        await Future.delayed(const Duration(seconds: 2));
-        Navigator.pushReplacementNamed(context, '/home');
-
       } catch (ex) {
         setState(() {
           _isLoading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Erro ao fazer login")),
+          const SnackBar(content: Text("Erro ao criar usuário")),
         );
       }
     }
@@ -78,6 +76,22 @@ class _LoginPageState extends State<LoginPage> {
                   key: _formKey,
                   child: Column(
                     children: [
+                      TextFormField(
+                        controller: _nomeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Nome',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.person),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Informe o nome';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+          
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
@@ -123,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: _login,
+                          onPressed: _register,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color.fromARGB(255, 106, 68, 172),
                             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -134,21 +148,18 @@ class _LoginPageState extends State<LoginPage> {
                                 strokeWidth: 2,
                               )
                             :
-                          const Text(
-                            'Entrar',
-                            style: TextStyle(
+                          Text('Criar Conta',
+                            style: const TextStyle(
                               fontSize: 18,
                               color: Colors.white70
-                              )
+                            ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 12),
                       TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/register');
-                        },
-                        child: const Text('Não tem conta? Criar uma'),
+                        onPressed: () =>  Navigator.pop(context),
+                        child: Text( 'Já tem conta? Entrar')
                       ),
                     ],
                   ),
