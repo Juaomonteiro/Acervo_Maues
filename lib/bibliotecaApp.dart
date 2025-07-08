@@ -12,11 +12,12 @@ class BibliotecaApp extends StatelessWidget {
     return MaterialApp(
       title: 'Biblioteca Digital',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        appBarTheme: AppBarTheme(
-          color: const Color.fromARGB(132, 62, 72, 209),
-          centerTitle: true
-        )
+        primarySwatch:  Colors.blue,
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+        ),
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: '/login',
