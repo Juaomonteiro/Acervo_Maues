@@ -5,24 +5,24 @@ import 'package:biblioteca/pages/login_page.dart';
 class BibliotecaApp extends StatelessWidget {
   const BibliotecaApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Biblioteca Digital',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        appBarTheme: AppBarTheme(
-          color: const Color.fromARGB(132, 62, 72, 209),
-          centerTitle: true
-        )
+ @override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    title: 'Biblioteca Digital',
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(
+      primarySwatch:  Colors.blue,
+      appBarTheme: const AppBarTheme(
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
       ),
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/home': (context) => const BookPage(),
-      },
-    );
-  }
+    ),
+    initialRoute: '/home',
+    routes: {
+      '/login': (context) => const LoginPage(),
+      '/home': (context) => const BookPage(),
+    },
+  );
 }
-
+}

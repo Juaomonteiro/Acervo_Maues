@@ -20,7 +20,7 @@ class BookCard extends StatelessWidget {
         );
       },
       child: Card(
-        color: const Color.fromARGB(255, 63, 65, 221),
+        color: const Color.fromARGB(255, 15, 44, 51),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),

@@ -25,7 +25,26 @@ class _BookPageState extends State<BookPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ACERVO DO GUARANÁ')),
+      appBar: PreferredSize(
+  preferredSize: Size.fromHeight(kToolbarHeight),
+  child: Container(
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color.fromARGB(255, 166, 189, 204), // Roxo
+          Color(0xFF2575FC), // Azul
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+    ),
+    child: AppBar(
+      title: const Text('Biblioteca Digital'),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ),
+  ),
+),
       body: FutureBuilder<List<Livro?>>(
         future: _futureBooks,
         builder: (context, snapshot) {
