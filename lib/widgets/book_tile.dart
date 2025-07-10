@@ -20,12 +20,12 @@ class BookCard extends StatelessWidget {
         );
       },
       child: Card(
-        color: const Color.fromARGB(255, 63, 65, 221),
+        color: const Color.fromARGB(255, 67, 143, 156),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
         elevation: 4,
-        shadowColor: const Color.fromARGB(255, 15, 3, 87),
+        shadowColor: const Color.fromARGB(255, 3, 74, 87),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(

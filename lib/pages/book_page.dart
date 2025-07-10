@@ -1,4 +1,3 @@
-import 'package:biblioteca/pages/login_page.dart';
 import 'package:biblioteca/services/consumer_api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -15,13 +14,35 @@ class BookPage extends StatefulWidget {
 
 class _BookPageState extends State<BookPage> {
   late final BookController _controller;
-  late Future<List<Livro?>> _futureBooks;
+  final TextEditingController _searchController = TextEditingController();
+
+  List<Livro> _allBooks = [];
+  List<Livro> _filteredBooks = [];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _controller = BookController(ConsumerApiService());
-    _futureBooks = _controller.loadBooks();
+    _loadBooks();
+  }
+
+  void _loadBooks() async {
+    final livros = await _controller.loadBooks();
+    setState(() {
+      _allBooks = livros.whereType<Livro>().toList();
+      _filteredBooks = _allBooks;
+    });
+  }
+
+  void _filterBooks(String query) {
+    final resultados = _allBooks.where((livro) {
+      final titulo = livro.titulo?.toLowerCase() ?? '';
+      return titulo.contains(query.toLowerCase());
+    }).toList();
+
+    setState(() {
+      _filteredBooks = resultados;
+    });
   }
 
   @override
@@ -33,8 +54,8 @@ class _BookPageState extends State<BookPage> {
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color.fromARGB(255, 166, 189, 204), // Roxo
-                Color.fromARGB(255, 11, 42, 97), // Azul
+                Color.fromARGB(255, 188, 205, 216),
+                Color.fromARGB(255, 30, 118, 124),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -47,32 +68,41 @@ class _BookPageState extends State<BookPage> {
           ),
         ),
       ),
-      body: FutureBuilder<List<Livro?>>(
-        future: _futureBooks,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Nenhum livro encontrado.'));
-          }
-
-          final books = snapshot.data!;
-          return GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 0.65,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+            child: TextField(
+              controller: _searchController,
+              onChanged: _filterBooks,
+              decoration: InputDecoration(
+                hintText: 'Buscar livros...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                prefixIcon: const Icon(Icons.search),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+              ),
             ),
-            itemCount: books.length,
-            itemBuilder: (context, index) {
-              return BookCard(book: books[index]!);
-            },
-          );
-        },
+          ),
+          Expanded(
+            child: _filteredBooks.isEmpty
+                ? const Center(child: Text('Nenhum livro encontrado.'))
+                : GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 0.65,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemCount: _filteredBooks.length,
+                    itemBuilder: (context, index) {
+                      return BookCard(book: _filteredBooks[index]);
+                    },
+                  ),
+          ),
+        ],
       ),
     );
   }

@@ -15,6 +15,7 @@ class BibliotecaApp extends StatelessWidget {
         primarySwatch:  Colors.blue,
         appBarTheme: const AppBarTheme(
           elevation: 0,
+          foregroundColor: Colors.white,
           centerTitle: true,
           backgroundColor: Colors.transparent,
         ),
