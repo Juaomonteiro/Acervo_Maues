@@ -7,4 +7,5 @@ abstract class IConsumerApiService{
   Future<List<Livro?>> getAllBooks();
   Future<LoginResponse?> postLoginUser(String email, String senha);
   Future<bool> postRegisterUser(String nome, String email, String senha); 
+  Future<List<Livro?>> getBooksByTitle(String title);
 }

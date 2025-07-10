@@ -14,6 +14,8 @@ class BookPage extends StatefulWidget {
 
 class _BookPageState extends State<BookPage> {
   late final BookController _controller;
+  late Future<List<Livro?>> _futureBooks;
+  late final TextEditingController _textController;
   final TextEditingController _searchController = TextEditingController();
 
   List<Livro> _allBooks = [];
@@ -22,6 +24,7 @@ class _BookPageState extends State<BookPage> {
   @override
   void initState() {
     super.initState();
+    _textController = TextEditingController();
     _controller = BookController(ConsumerApiService());
     _loadBooks();
   }
@@ -44,7 +47,7 @@ class _BookPageState extends State<BookPage> {
       _filteredBooks = resultados;
     });
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,39 +74,53 @@ class _BookPageState extends State<BookPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+            padding: const EdgeInsets.fromLTRB(20,20,20,0),
             child: TextField(
-              controller: _searchController,
-              onChanged: _filterBooks,
               decoration: InputDecoration(
-                hintText: 'Buscar livros...',
+                prefixIcon: Icon(Icons.search),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                hintText: 'Buscar Livros...',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12)
                 ),
-                prefixIcon: const Icon(Icons.search),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
               ),
+              controller: _textController,
+              // onChanged: _fliterBooks,
             ),
           ),
+          
           Expanded(
-            child: _filteredBooks.isEmpty
-                ? const Center(child: Text('Nenhum livro encontrado.'))
-                : GridView.builder(
-                    padding: const EdgeInsets.all(16),
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                      childAspectRatio: 0.65,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                    ),
-                    itemCount: _filteredBooks.length,
-                    itemBuilder: (context, index) {
-                      return BookCard(book: _filteredBooks[index]);
-                    },
+            flex: 1,
+            child: FutureBuilder<List<Livro?>>(
+              future: _futureBooks,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Erro: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('Nenhum livro encontrado.'));
+                }
+            
+                final books = snapshot.data!;
+                return GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 0.65,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
                   ),
+                  itemCount: books.length,
+                  itemBuilder: (context, index) {
+                    return BookCard(book: books[index]!);
+                  },
+                );
+              },
+            ),
           ),
         ],
-      ),
+      )
     );
   }
 }
