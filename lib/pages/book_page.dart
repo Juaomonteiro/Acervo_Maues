@@ -14,8 +14,7 @@ class BookPage extends StatefulWidget {
 
 class _BookPageState extends State<BookPage> {
   late final BookController _controller;
-  late Future<List<Livro?>> _futureBooks;
-  late final TextEditingController _textController;
+  late final Future<List<Livro?>> _futureBooks;
   final TextEditingController _searchController = TextEditingController();
 
   List<Livro> _allBooks = [];
@@ -24,8 +23,8 @@ class _BookPageState extends State<BookPage> {
   @override
   void initState() {
     super.initState();
-    _textController = TextEditingController();
     _controller = BookController(ConsumerApiService());
+    _futureBooks = _controller.loadBooks();
     _loadBooks();
   }
 
@@ -39,7 +38,7 @@ class _BookPageState extends State<BookPage> {
 
   void _filterBooks(String query) {
     final resultados = _allBooks.where((livro) {
-      final titulo = livro.titulo?.toLowerCase() ?? '';
+      final titulo = livro.titulo.toLowerCase();
       return titulo.contains(query.toLowerCase());
     }).toList();
 
@@ -84,40 +83,40 @@ class _BookPageState extends State<BookPage> {
                   borderRadius: BorderRadius.circular(12)
                 ),
               ),
-              controller: _textController,
-              // onChanged: _fliterBooks,
+              controller: _searchController,
+              onChanged: (value) => _filterBooks(_searchController.text),
             ),
           ),
           
           Expanded(
             flex: 1,
-            child: FutureBuilder<List<Livro?>>(
-              future: _futureBooks,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Erro: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('Nenhum livro encontrado.'));
-                }
-            
-                final books = snapshot.data!;
-                return GridView.builder(
-                  padding: const EdgeInsets.all(16),
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 0.65,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
+            child: _allBooks.isEmpty
+                ? FutureBuilder<List<Livro?>>(
+                    future: _futureBooks,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Erro: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(child: Text('Nenhum livro encontrado.'));
+                      }
+                      return const SizedBox(); // This will be replaced by the GridView below once data loads
+                    },
+                  )
+                : GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 0.65,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemCount: _filteredBooks.length,
+                    itemBuilder: (context, index) {
+                      return BookCard(book: _filteredBooks[index]);
+                    },
                   ),
-                  itemCount: books.length,
-                  itemBuilder: (context, index) {
-                    return BookCard(book: books[index]!);
-                  },
-                );
-              },
-            ),
           ),
         ],
       )
