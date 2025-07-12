@@ -28,48 +28,50 @@ class BookCard extends StatelessWidget {
         shadowColor: const Color.fromARGB(255, 3, 74, 87),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Imagem do livro
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  book.urlImagem,
-                  height: 160,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Imagem do livro
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    book.urlImagem,
                     height: 160,
-                    color: Colors.grey[300],
-                    child: const Center(child: Icon(Icons.broken_image)),
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      height: 160,
+                      color: Colors.grey[300],
+                      child: const Center(child: Icon(Icons.broken_image)),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              // Título
-              Text(
-                book.titulo,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
+                const SizedBox(height: 12),
+                // Título
+                Text(
+                  book.titulo,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              // Autor (opcional)
-              Text(
-                book.autor ?? 'Autor desconhecido',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 247, 245, 245),
-                  fontSize: 14,
+                const SizedBox(height: 4),
+                // Autor (opcional)
+                Text(
+                  book.autor ?? 'Autor desconhecido',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 247, 245, 245),
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
