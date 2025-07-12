@@ -13,5 +13,11 @@ class BookController {
     }
     return bookList;
   }
-  
+  Future<List<Livro?>> searchBooksByTitle(String title) async{
+    var bookList = await _service.getBooksByTitle(title);
+    if(bookList.isEmpty){
+      return List.empty();
+    }
+    return bookList;
+  }
 }

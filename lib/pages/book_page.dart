@@ -14,7 +14,7 @@ class BookPage extends StatefulWidget {
 
 class _BookPageState extends State<BookPage> {
   late final BookController _controller;
-  late final Future<List<Livro?>> _futureBooks;
+  late Future<List<Livro?>> _futureBooks;
   final TextEditingController _searchController = TextEditingController();
 
   List<Livro> _allBooks = [];
@@ -36,14 +36,17 @@ class _BookPageState extends State<BookPage> {
     });
   }
 
-  void _filterBooks(String query) {
-    final resultados = _allBooks.where((livro) {
-      final titulo = livro.titulo.toLowerCase();
-      return titulo.contains(query.toLowerCase());
-    }).toList();
-
+  void _filterBooks(String title) async{
+    var livros = await _controller.searchBooksByTitle(title);
+    // if(livros.isEmpty){
+    //   setState(() {
+    //      _futureBooks = Future.value(livros);
+    //   });
+    // }
     setState(() {
-      _filteredBooks = resultados;
+      _allBooks = livros.whereType<Livro>().toList();
+      _filteredBooks = _allBooks ;
+      _futureBooks = Future.value(livros);
     });
   }
   
@@ -99,7 +102,29 @@ class _BookPageState extends State<BookPage> {
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Erro: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Center(child: Text('Nenhum livro encontrado.'));
+                        return SingleChildScrollView(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 175),
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/4076/4076549.png', // imagem de livro fofo
+                                  width: 80,
+                                  height: 80,
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  'Nenhum livro encontrado.',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
                       }
                       return const SizedBox(); // This will be replaced by the GridView below once data loads
                     },

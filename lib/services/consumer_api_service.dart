@@ -48,12 +48,12 @@ import 'package:dio/dio.dart';
         return false;
       }
     }
-    
+     
     @override
     Future<List<Livro?>> getBooksByTitle(String title) async {
       try
       {
-        var response = await _dio.get('Book/books/$title');
+        var response = await _dio.get('/Book/books/$title');
         if(response.statusCode !=200){
           throw Exception(response.statusMessage); 
         }
@@ -61,7 +61,7 @@ import 'package:dio/dio.dart';
         return data.map((json) => Livro.fromJson(json)).toList();
       }
       catch(e){
-       throw Exception(e); 
+        return List.empty();
       }
     }
   }
