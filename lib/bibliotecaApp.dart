@@ -19,6 +19,16 @@ class BibliotecaApp extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Colors.transparent,
         ),
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 67, 143, 156),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all(
+              const Color.fromARGB(255, 67, 143, 156),
+            ),
+          ),
+        ),
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: '/login',

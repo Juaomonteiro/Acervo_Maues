@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Icon(Icons.library_books, size: 100, color: Colors.deepPurple),
+               const Icon(Icons.library_books, size: 100),
                 const SizedBox(height: 16),
                 const Text(
                   "Biblioteca Digital",
@@ -125,7 +125,6 @@ class _LoginPageState extends State<LoginPage> {
                         child: ElevatedButton(
                           onPressed: _login,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 106, 68, 172),
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
                           child: _isLoading
